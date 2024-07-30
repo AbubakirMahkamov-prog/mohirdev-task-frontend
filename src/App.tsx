@@ -6,8 +6,7 @@ import Login from './pages/Login';
 
 function App() {
   // Equivalent to data() in Vue, manages local component state
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-
+  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('token') ?? false)
   // Function to handle login, updates the state
   const handleLogin = () => {
     setIsAuthenticated(true);
@@ -18,7 +17,7 @@ function App() {
       {/* Similar to Vue's <router-view>, but defines all routes here */}
       <Routes>
         {/* Public route */}
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/login" element={<Login onLoginSuccess={handleLogin} />} />
         {/* Protected routes */}
         <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
         <Route path="/about" element={isAuthenticated ? <About /> : <Navigate to="/login" />} />

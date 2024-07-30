@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
+import * as UserService from '../services/authService'
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
 
 const formSchema = z.object({
   email: z.string().min(2, {
@@ -24,9 +25,13 @@ const formSchema = z.object({
     message: "Password must be at least 2 characters.",
   }),
 })
-
-export default function ProfileForm() {
+interface ProfileFormProps {
+    onLoginSuccess: () => void; // Define the prop type
+  }
+export default function ProfileForm({ onLoginSuccess }: ProfileFormProps) {
   // Initialize the form with useForm hook and zod schema validation
+  const navigate = useNavigate(); // Initialize the navigate function
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,10 +39,15 @@ export default function ProfileForm() {
         password: ""
     },
   });
-
+  
+  
   // Define the onSubmit function
   const onSubmit = (data: any) => {
-    console.log(data);
+    UserService.Login(data).then((res: any) => {
+        localStorage.setItem('token', res.token)
+        onLoginSuccess()
+        navigate('/')
+    })
   };
 
   return (
