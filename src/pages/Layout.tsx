@@ -1,21 +1,19 @@
 import React, { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-
+import { Button } from '@/components/ui/button'
+import { useNavigate } from 'react-router-dom';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 // Define the type for the props
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const navigate = useNavigate()
   return (
     <div>
-      <header>
-        <nav>
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/about">About</Link></li>
-          </ul>
-        </nav>
+      <header className='border'>
+        <Button onClick={ () => navigate('/about')}>About</Button>
       </header>
       <main>{children}</main>
       <footer>
