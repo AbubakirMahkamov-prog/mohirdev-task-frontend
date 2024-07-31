@@ -20,6 +20,14 @@ import * as userService from '../services/userService';
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
+import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
@@ -39,66 +47,24 @@ import {
 } from "@/components/ui/table"
 
 export type User = {
-  id: string
+  _id: string
   fullname: string
   email: string
   role: "user" | "admin"
 }
 
-export const columns: ColumnDef<User>[] = [
-  {
-    accessorKey: "fullname",
-    header: "Fullname",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("fullname")}</div>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "role",
-    header: "Role",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("role")}</div>
-    ),
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const User = row.original
 
-      return (
-        <div className="flex justify-end">
-            <Button>Edit</Button>
-            <Button variant={'destructive'} className="ml-4">Delete</Button>
-        </div>
-      )
-    },
-  },
-]
 
 export default function DataTableDemo() {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
+  const [deleteDialog, setDeleteDialog] = React.useState(false)
+  const [selectedUserId, setSelectedUserId] = React.useState<string>('')
   const [tableData, setTableData] = React.useState<User[]>([])
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
+  React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
   useEffect(() => {
     userService
@@ -110,7 +76,49 @@ export default function DataTableDemo() {
         console.error("Error fetching data: ", err);
       });
   }, []);
-
+  const columns: ColumnDef<User>[] = [
+    {
+      accessorKey: "fullname",
+      header: "Fullname",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("fullname")}</div>
+      ),
+    },
+    {
+      accessorKey: "email",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Email
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    },
+    {
+      accessorKey: "role",
+      header: "Role",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("role")}</div>
+      ),
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        return (
+          <div className="flex justify-end">
+              <Button onClick={() => console.log(row)}>Edit</Button>
+              <Button variant={'destructive'} onClick={() => {setSelectedUserId(row.original._id); setDeleteDialog(true); }} className="ml-4">Delete</Button>
+          </div>
+        )
+      },
+    },
+  ]
   const table = useReactTable({
     data: tableData,
     columns,
@@ -244,6 +252,23 @@ export default function DataTableDemo() {
         </div>
       </div>
     </div>
+     {/* Delete Confirmation Dialog */}
+     <Dialog open={deleteDialog} onOpenChange={setDeleteDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Confirm Deletion</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to delete this user?
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex justify-end space-x-4 mt-4">
+              <Button onClick={() => setDeleteDialog(false)}>Cancel</Button>
+              <Button variant="destructive" onClick={() => {
+                userService.deleteItem(selectedUserId).then(() => userService.getAll().then((res: User[]) => setTableData(res), setDeleteDialog(false)))
+              }}>Delete</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
     </MyLayout>
   )
 }

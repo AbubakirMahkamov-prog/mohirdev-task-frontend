@@ -7,3 +7,9 @@ export function getAll() {
         return res.data
     })
 }
+
+export function deleteItem(id: string) {
+    return httpClient.delete(endPoint + `/${id}`).then((res) => {
+        return res.data;
+    })
+}
