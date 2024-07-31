@@ -14,6 +14,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <header className='border p-2 rounded'>
         <ul className='p-0 flex'>
           <li>
+            <Button onClick={() => navigate('/')} variant={'link'}>Home</Button>
+          </li>
+          <li>
             <Button onClick={() => navigate('/users')} variant={'link'}>Users</Button>
           </li>
           <li>
@@ -22,8 +25,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </ul>
       </header>
       <main>{children}</main>
-      <footer>
-        <p>© 2024 My Website</p>
+      <footer className='text-center mt-12'>
+        <p>© Developed by Abubakir 2024</p>
       </footer>
     </div>
   );

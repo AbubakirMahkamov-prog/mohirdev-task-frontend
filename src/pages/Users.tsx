@@ -160,6 +160,7 @@ export default function DataTableDemo() {
         />
         <Button onClick={() => {
             setFormDialog(true);
+            setSelectedUserId('')
         }} className="ml-2">Create</Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -5,8 +5,7 @@ function Home() {
     <Layout>
         <div>
 
-            <h1>Home Page</h1>
-            <p>Welcome to the home page. You are logged in!</p>
+            <h1 className='text-6xl mt-48 text-center'>Mohirdev sinov task (vazifasi)</h1>
         </div>
     </Layout>
   );
