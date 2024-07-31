@@ -1,8 +1,7 @@
 import React, { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from "@/components/ui/button"
+
 // Define the type for the props
 interface LayoutProps {
   children: ReactNode;
@@ -11,9 +10,16 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate()
   return (
-    <div>
-      <header className='border'>
-        <Button onClick={ () => navigate('/about')}>About</Button>
+    <div className='p-4'>
+      <header className='border p-2 rounded'>
+        <ul className='p-0 flex'>
+          <li>
+            <Button onClick={() => navigate('/users')} variant={'link'}>Users</Button>
+          </li>
+          <li>
+            <Button onClick={() => navigate('/about')} variant={'link'}>About</Button>
+          </li>
+        </ul>
       </header>
       <main>{children}</main>
       <footer>

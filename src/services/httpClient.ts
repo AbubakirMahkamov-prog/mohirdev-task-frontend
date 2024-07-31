@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { history } from './navigation'; // Import the history object
 const baseUrl = 'http://localhost:4000';
 const httpClient = axios.create({
     baseURL: baseUrl,
@@ -20,7 +21,9 @@ httpClient.interceptors.response.use(
         return response;
     },
     function (error: AxiosError) {
-        
+        if (error.response?.status === 401) {
+            history.push('/login');
+          }
         return Promise.reject(error);
     }
 );

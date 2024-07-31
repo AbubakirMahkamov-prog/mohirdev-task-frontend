@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Home from './pages/Home';
 import About from './pages/About';
 import Login from './pages/Login';
+import Users from './pages/Users';
 
 function App() {
   // Equivalent to data() in Vue, manages local component state
@@ -21,6 +22,7 @@ function App() {
         {/* Protected routes */}
         <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
         <Route path="/about" element={isAuthenticated ? <About /> : <Navigate to="/login" />} />
+        <Route path="/users" element={isAuthenticated ? <Users /> : <Navigate to="/users" />} />
       </Routes>
     </Router>
   );
