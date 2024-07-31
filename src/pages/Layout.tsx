@@ -26,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </header>
       <main>{children}</main>
       <footer className='text-center mt-12'>
-        <p>© Developed by Abubakir 2024</p>
+        <p>© Developed by Abubakir in 2024</p>
       </footer>
     </div>
   );
