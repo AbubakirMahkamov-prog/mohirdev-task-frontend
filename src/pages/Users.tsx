@@ -117,7 +117,10 @@ export default function DataTableDemo() {
       cell: ({ row }) => {
         return (
           <div className="flex justify-end">
-              <Button onClick={() => console.log(row)}>Edit</Button>
+              <Button onClick={() => {
+                setSelectedUserId(row.original._id);
+                setFormDialog(true)
+              }}>Edit</Button>
               <Button variant={'destructive'} onClick={() => {setSelectedUserId(row.original._id); setDeleteDialog(true); }} className="ml-4">Delete</Button>
           </div>
         )
@@ -155,7 +158,9 @@ export default function DataTableDemo() {
           }
           className="max-w-sm"
         />
-        <Button onClick={() => setFormDialog(true)} className="ml-2">Create</Button>
+        <Button onClick={() => {
+            setFormDialog(true);
+        }} className="ml-2">Create</Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -285,7 +290,7 @@ export default function DataTableDemo() {
             <DialogTitle>
                 UserForm
             </DialogTitle>
-            <UserForm onCreateSuccess={() => {
+            <UserForm id={selectedUserId} onSuccess={() => {
                 getAllUser(); setFormDialog(false);
             }} />
         </DialogContent>

@@ -1,5 +1,5 @@
 "use client"
-
+import { useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -33,14 +33,14 @@ const formSchema = z.object({
   password: z.string().min(2, {
     message: "Password must be at least 2 characters.",
   }),
-  role: z.string()
+  role: z.enum(['user', 'admin']),
 })
 interface ProfileFormProps {
-  onCreateSuccess: () => void; // Define the prop type
-  }
-export default function ProfileForm({ onCreateSuccess }: ProfileFormProps) {
+  onSuccess: () => void; // Define the prop type
+  id?: string;
+}
+export default function ProfileForm({ onSuccess, id }: ProfileFormProps) {
   // Initialize the form with useForm hook and zod schema validation
-
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,12 +51,26 @@ export default function ProfileForm({ onCreateSuccess }: ProfileFormProps) {
     },
   });
   
-  
+  useEffect(() => {
+    if(id) {
+      UserService.getOne(id).then(res => {
+        form.setValue('fullname', res.fullname);
+        form.setValue('email', res.email);
+        form.setValue('role', res.role);
+      }) 
+    }
+  }, [])
   // Define the onSubmit function
   const onSubmit = (data: any) => {
-    UserService.createItem(data).then(() => {
-      onCreateSuccess()
-    })
+    if(!id) {
+      UserService.createItem(data).then(() => {
+        onSuccess()
+      })
+    } else {
+      UserService.updateItem(id, data).then(() => {
+        onSuccess()
+      })
+    }
   };
 
   return (
@@ -111,7 +125,7 @@ export default function ProfileForm({ onCreateSuccess }: ProfileFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Role</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Role" />
