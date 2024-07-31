@@ -19,6 +19,7 @@ import { ArrowUpDown, ChevronDown, Layout, MoreHorizontal } from "lucide-react"
 import * as userService from '../services/userService';
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import UserForm from '../components/my-components/UserForm'
 import {
     Dialog,
     DialogContent,
@@ -61,12 +62,13 @@ export default function DataTableDemo() {
     []
   )
   const [deleteDialog, setDeleteDialog] = React.useState(false)
+  const [formDialog, setFormDialog] = React.useState(false)
   const [selectedUserId, setSelectedUserId] = React.useState<string>('')
   const [tableData, setTableData] = React.useState<User[]>([])
   const [columnVisibility, setColumnVisibility] =
   React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
-  useEffect(() => {
+  function getAllUser() {
     userService
       .getAll()
       .then((res: User[]) => {
@@ -75,6 +77,9 @@ export default function DataTableDemo() {
       .catch((err) => {
         console.error("Error fetching data: ", err);
       });
+  }
+  useEffect(() => {
+    getAllUser()
   }, []);
   const columns: ColumnDef<User>[] = [
     {
@@ -150,6 +155,7 @@ export default function DataTableDemo() {
           }
           className="max-w-sm"
         />
+        <Button onClick={() => setFormDialog(true)} className="ml-2">Create</Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -264,11 +270,26 @@ export default function DataTableDemo() {
             <div className="flex justify-end space-x-4 mt-4">
               <Button onClick={() => setDeleteDialog(false)}>Cancel</Button>
               <Button variant="destructive" onClick={() => {
-                userService.deleteItem(selectedUserId).then(() => userService.getAll().then((res: User[]) => setTableData(res), setDeleteDialog(false)))
+                userService.deleteItem(selectedUserId).then(() => {
+                    getAllUser(); setDeleteDialog(false)
+                })
               }}>Delete</Button>
             </div>
           </DialogContent>
         </Dialog>
+
+     {/* Form Dialog */}
+    
+    <Dialog open={formDialog} onOpenChange={setFormDialog}>
+        <DialogContent>
+            <DialogTitle>
+                UserForm
+            </DialogTitle>
+            <UserForm onCreateSuccess={() => {
+                getAllUser(); setFormDialog(false);
+            }} />
+        </DialogContent>
+    </Dialog>
     </MyLayout>
   )
 }

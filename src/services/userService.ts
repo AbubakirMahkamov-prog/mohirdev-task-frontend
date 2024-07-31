@@ -13,3 +13,9 @@ export function deleteItem(id: string) {
         return res.data;
     })
 }
+
+export function createItem(data: any) {
+    return httpClient.post(endPoint + `/`, data).then((res) => {
+        return res.data;
+    })
+}
