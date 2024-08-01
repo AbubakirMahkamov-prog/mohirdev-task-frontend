@@ -1,7 +1,16 @@
 import { Button } from "@/components/ui/button"
 import Layout from './Layout'
 import { Badge } from "@/components/ui/badge"
-
+import * as taskService from "../services/taskService";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
+import TaskForm from '../components/my-components/TaskForm'
 import {
   Card,
   CardContent,
@@ -18,13 +27,17 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import { useEffect, useState } from "react"
 
 export default function TabsDemo() {
-  const tasks = [
-    { status: 'new', name: 'Alice', content: "test" },
-    { status: 'new', name: 'Bob', content: "test"},
-    { status: 3, name: 'Charlie', content: "test" }
-  ]
+  const [tasks, setTasks] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const getMine = () => {
+    taskService.getMine().then((res: any) => setTasks(res))
+  }
+  useEffect(() => {
+    getMine()
+  }, [])
   return (
     <Layout>
         <Tabs defaultValue="new">
@@ -33,7 +46,9 @@ export default function TabsDemo() {
             <TabsTrigger value="completed">Completed</TabsTrigger>
         </TabsList>
         <TabsContent value="new">
-            <Button>Create</Button>
+            <Button onClick={() => {
+                setDialogOpen(true)
+            }}>Create</Button>
             <div className="grid grid-cols-4 gap-4 mt-2">
                 {
                     tasks.map(task => (
@@ -80,6 +95,13 @@ export default function TabsDemo() {
             </Card>
         </TabsContent>
         </Tabs>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTitle>
+            </DialogTitle>
+          <DialogContent>
+                <TaskForm  onSuccess={() => getMine()} />
+          </DialogContent>
+      </Dialog>
     </Layout>
   )
 }

@@ -282,7 +282,7 @@ export default function DataTableDemo() {
               }}>Delete</Button>
             </div>
           </DialogContent>
-        </Dialog>
+      </Dialog>
 
      {/* Form Dialog */}
     
