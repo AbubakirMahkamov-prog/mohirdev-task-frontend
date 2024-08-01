@@ -45,6 +45,7 @@ export default function ProfileForm({ onLoginSuccess }: ProfileFormProps) {
   const onSubmit = (data: any) => {
     UserService.Login(data).then((res: any) => {
         localStorage.setItem('token', res.token)
+        localStorage.setItem('role', res.role)
         onLoginSuccess()
         navigate('/')
     })

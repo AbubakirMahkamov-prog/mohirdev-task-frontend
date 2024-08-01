@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const RouteGuard = ({ children }) => {
+const RouteGuard = ({ children: any }) => {
   const [isAuth, setIsAuth] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();

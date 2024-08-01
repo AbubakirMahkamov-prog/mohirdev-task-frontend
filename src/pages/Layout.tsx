@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 interface LayoutProps {
   children: ReactNode;
 }
+const isAdmin = localStorage.getItem('role') == 'admin' ? true: false;
+
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate()
@@ -16,11 +18,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <li>
             <Button onClick={() => navigate('/')} variant={'link'}>Home</Button>
           </li>
+          {
+            isAdmin && (
+              <li>
+                <Button onClick={() => navigate('/users')} variant={'link'}>Users</Button>
+              </li>
+            )
+          }
           <li>
-            <Button onClick={() => navigate('/users')} variant={'link'}>Users</Button>
-          </li>
-          <li>
-            <Button onClick={() => navigate('/about')} variant={'link'}>About</Button>
+            <Button onClick={() => navigate('/task-bar')} variant={'link'}>Taskbar</Button>
           </li>
         </ul>
       </header>

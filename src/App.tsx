@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
-import About from './pages/About';
+import TaskBar from './pages/TaskBar';
 import Login from './pages/Login';
 import Users from './pages/Users';
 
@@ -17,12 +17,12 @@ function App() {
     <Router>
       {/* Similar to Vue's <router-view>, but defines all routes here */}
       <Routes>
-        {/* Public route */}
-        <Route path="/login" element={<Login onLoginSuccess={handleLogin} />} />
-        {/* Protected routes */}
-        <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
-        <Route path="/about" element={isAuthenticated ? <About /> : <Navigate to="/login" />} />
-        <Route path="/users" element={isAuthenticated ? <Users /> : <Navigate to="/users" />} />
+          {/* Public route */}
+          <Route path="/login" element={<Login onLoginSuccess={handleLogin} />} />
+          {/* Protected routes */}
+          <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
+          <Route path="/task-bar" element={isAuthenticated ? <TaskBar /> : <Navigate to="/login" />} />
+          <Route path="/users" element={isAuthenticated ? <Users /> : <Navigate to="/users" />} />
       </Routes>
     </Router>
   );
