@@ -29,11 +29,18 @@ import {
 } from "@/components/ui/tabs"
 import { useEffect, useState } from "react"
 
+interface ITask {
+  _id: string;
+  title: string;
+  status: 'new' | 'completed';
+  content: string;
+}
+
 export default function TabsDemo() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<ITask[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const getMine = () => {
-    taskService.getMine().then((res: any) => setTasks(res))
+    taskService.getMine().then((res: ITask[]) => setTasks(res))
   }
   useEffect(() => {
     getMine()
@@ -52,10 +59,10 @@ export default function TabsDemo() {
             <div className="grid grid-cols-4 gap-4 mt-2">
                 {
                     tasks.map(task => (
-                    <Card>
+                    <Card key={task._id}>
                         <CardHeader>
                             <div className="flex justify-between align-middle">
-                                <CardTitle>{task.name}</CardTitle>
+                                <CardTitle>{task.title}</CardTitle>
                                 <Badge variant={'secondary'}>{task.status}</Badge>
                             </div>
                         </CardHeader>
@@ -99,7 +106,10 @@ export default function TabsDemo() {
             <DialogTitle>
             </DialogTitle>
           <DialogContent>
-                <TaskForm  onSuccess={() => getMine()} />
+                <TaskForm  onSuccess={() => {
+                  getMine();
+                  setDialogOpen(false);
+                }} />
           </DialogContent>
       </Dialog>
     </Layout>
