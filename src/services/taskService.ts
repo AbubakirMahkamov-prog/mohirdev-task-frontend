@@ -2,8 +2,27 @@ import httpClient from "./httpClient";
 const endPoint = '/task'
 
 
-export function getMine() {
-    return httpClient.get(endPoint + '/get-mine').then((res) => {
+export function getMineNew() {
+    return httpClient.get(endPoint + '/get-mine-new').then((res) => {
+        return res.data
+    })
+}
+
+export function setNew(id: string) {
+    return httpClient.post(endPoint + `/set-new/${id}`).then((res) => {
+        return res.data
+    })
+}
+
+export function setCompleted(id: string) {
+    return httpClient.post(endPoint + `/set-completed/${id}`).then((res) => {
+        return res.data
+    })
+}
+
+
+export function getMineCompleted() {
+    return httpClient.get(endPoint + '/get-mine-completed').then((res) => {
         return res.data
     })
 }

@@ -30,6 +30,10 @@ interface ProfileFormProps {
   onSuccess: () => void; // Define the prop type
   id?: string;
 }
+interface ITask {
+  title: string;
+  content: string;
+}
 export default function ProfileForm({ onSuccess, id }: ProfileFormProps) {
   // Initialize the form with useForm hook and zod schema validation
   const form = useForm({
@@ -41,13 +45,16 @@ export default function ProfileForm({ onSuccess, id }: ProfileFormProps) {
   });
   
   useEffect(() => {
-    if(id) {
-      taskService.getOne(id).then(res => {
-        form.setValue('title', res.title);
-        form.setValue('content', res.content);
-      }) 
-    }
-  }, [])
+    if (id) {
+        taskService.getOne(id).then((res: ITask) => {
+          form.setValue('title', res.title);
+          form.setValue('content', res.content);
+        });
+     
+  };
+  
+  }, [id]);
+  
   // Define the onSubmit function
   const onSubmit = (data: any) => {
     if(!id) {

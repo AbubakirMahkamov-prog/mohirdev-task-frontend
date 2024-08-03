@@ -37,14 +37,38 @@ interface ITask {
 }
 
 export default function TabsDemo() {
-  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [newTasks, setNewTasks] = useState<ITask[]>([]);
+  const [completedTasks, setCompletedTasks] = useState<ITask[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const getMine = () => {
-    taskService.getMine().then((res: ITask[]) => setTasks(res))
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState('');
+  const getMineNew = () => {
+    taskService.getMineNew().then((res: ITask[]) => setNewTasks(res))
+  }
+  const getMineCompleted = () => {
+    taskService.getMineCompleted().then((res: ITask[]) => setCompletedTasks(res))
   }
   useEffect(() => {
-    getMine()
+    getMineNew();
+    getMineCompleted();
   }, [])
+
+  const setCompleted = (id: string) => {
+    taskService.setCompleted(id).then(() => {
+      getMineNew();
+      getMineCompleted();
+    })
+  }
+  const setNew = (id: string) => {
+    taskService.setNew(id).then(() => {
+      getMineNew();
+      getMineCompleted();
+    })
+  }
+  const openEditDialog = (_id: string) => {
+    setSelectedId(_id);
+    setEditDialogOpen(true)
+  }
   return (
     <Layout>
         <Tabs defaultValue="new">
@@ -58,7 +82,7 @@ export default function TabsDemo() {
             }}>Create</Button>
             <div className="grid grid-cols-4 gap-4 mt-2">
                 {
-                    tasks.map(task => (
+                    newTasks.map(task => (
                     <Card key={task._id}>
                         <CardHeader>
                             <div className="flex justify-between align-middle">
@@ -70,7 +94,8 @@ export default function TabsDemo() {
                             {task.content}
                         </CardContent>
                         <CardFooter>
-                            <Button className="p-2 w-full">Mark done</Button>
+                            <Button onClick={() => setCompleted(task._id)} className="p-2 w-full">Mark done</Button>
+                            <Button variant={'destructive'} onClick={() => openEditDialog(task._id)} className="p-2 ml-2">Edit</Button>
                         </CardFooter>
                     </Card>
                     ))
@@ -79,39 +104,50 @@ export default function TabsDemo() {
            
         </TabsContent>
         <TabsContent value="completed">
-            <Card>
-            <CardHeader>
-                <CardTitle>Password</CardTitle>
-                <CardDescription>
-                Change your password here. After saving, you'll be logged out.
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-                <div className="space-y-1">
-                <Label htmlFor="current">Current password</Label>
-                <Input id="current" type="password" />
-                </div>
-                <div className="space-y-1">
-                <Label htmlFor="new">New password</Label>
-                <Input id="new" type="password" />
-                </div>
-            </CardContent>
-            <CardFooter>
-                <Button>Save password</Button>
-            </CardFooter>
-            </Card>
+        <div className="grid grid-cols-4 gap-4 mt-2">
+                {
+                    completedTasks.map(task => (
+                    <Card key={task._id}>
+                        <CardHeader>
+                            <div className="flex justify-between align-middle">
+                                <CardTitle>{task.title}</CardTitle>
+                                <Badge variant={'secondary'}>{task.status}</Badge>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                            {task.content}
+                        </CardContent>
+                        <CardFooter>
+                            <Button onClick={ () => {
+                              setNew(task._id)
+                            }} className="p-2 w-full">Mark new</Button>
+                        </CardFooter>
+                    </Card>
+                    ))
+                }
+            </div>
         </TabsContent>
         </Tabs>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTitle>
-            </DialogTitle>
-          <DialogContent>
-                <TaskForm  onSuccess={() => {
-                  getMine();
-                  setDialogOpen(false);
-                }} />
-          </DialogContent>
-      </Dialog>
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              <DialogTitle>
+              </DialogTitle>
+            <DialogContent>
+                  <TaskForm  onSuccess={() => {
+                    getMineNew();
+                    setDialogOpen(false);
+                  }} />
+            </DialogContent>
+        </Dialog>
+        <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+              <DialogTitle>
+              </DialogTitle>
+            <DialogContent>
+                  <TaskForm id={selectedId} onSuccess={() => {
+                    getMineNew();
+                    setEditDialogOpen(false);
+                  }} />
+            </DialogContent>
+        </Dialog>
     </Layout>
   )
 }
