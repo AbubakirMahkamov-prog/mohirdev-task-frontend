@@ -33,6 +33,13 @@ export function getOne(id: string) {
     })
 }
 
+export function getStatistics() {
+    return httpClient.get(endPoint + `/statistics`).then((res) => {
+        return res.data;
+    })
+}
+
+
 export function createItem(data: any) {
     return httpClient.post(endPoint + `/`, data).then((res) => {
         return res.data;

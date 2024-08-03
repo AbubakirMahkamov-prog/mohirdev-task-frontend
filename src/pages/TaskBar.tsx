@@ -80,7 +80,7 @@ export default function TabsDemo() {
             <Button onClick={() => {
                 setDialogOpen(true)
             }}>Create</Button>
-            <div className="grid grid-cols-4 gap-4 mt-2">
+            <div className="grid grid-cols-4 max-sm:grid-cols-1 max-lg:grid-cols-2 gap-4 mt-2">
                 {
                     newTasks.map(task => (
                     <Card key={task._id}>
@@ -104,7 +104,7 @@ export default function TabsDemo() {
            
         </TabsContent>
         <TabsContent value="completed">
-        <div className="grid grid-cols-4 gap-4 mt-2">
+        <div className="grid grid-cols-4 max-sm:grid-cols-1 max-lg:grid-cols-2 gap-4 mt-2">
                 {
                     completedTasks.map(task => (
                     <Card key={task._id}>

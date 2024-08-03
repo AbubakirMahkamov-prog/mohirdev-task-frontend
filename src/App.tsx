@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import TaskBar from './pages/TaskBar';
 import Login from './pages/Login';
 import Users from './pages/Users';
+import Statistics from './pages/Statistics';
 
 function App() {
   // Equivalent to data() in Vue, manages local component state
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
           <Route path="/task-bar" element={isAuthenticated ? <TaskBar /> : <Navigate to="/login" />} />
           <Route path="/users" element={isAuthenticated ? <Users /> : <Navigate to="/users" />} />
+          <Route path="/statistics" element={isAuthenticated ? <Statistics /> : <Navigate to="/statistics" />} />
       </Routes>
     </Router>
   );

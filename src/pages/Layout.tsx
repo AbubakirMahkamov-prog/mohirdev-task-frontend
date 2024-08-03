@@ -25,6 +25,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </li>
             )
           }
+            {
+            isAdmin && (
+              <li>
+                <Button onClick={() => navigate('/statistics')} variant={'link'}>Statistics</Button>
+              </li>
+            )
+          }
           <li>
             <Button onClick={() => navigate('/task-bar')} variant={'link'}>Taskbar</Button>
           </li>
