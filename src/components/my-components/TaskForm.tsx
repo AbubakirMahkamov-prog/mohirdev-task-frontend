@@ -64,7 +64,7 @@ export default function ProfileForm({ onSuccess, id }: ProfileFormProps) {
     } else {
       taskService.updateItem(id, data).then(() => {
         onSuccess()
-      })
+      });
     }
   };
 
