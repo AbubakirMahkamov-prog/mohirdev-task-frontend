@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { history } from './navigation'; // Import the history object
-const baseUrl = 'http://localhost:4000';
+// const baseUrl = 'http://localhost:4000';
+const baseUrl = 'https://api-mohirdev.abubakir.uz';
 const httpClient = axios.create({
     baseURL: baseUrl,
     timeout: 10000,
