@@ -52,10 +52,10 @@ export default function ProfileForm({ onLoginSuccess }: ProfileFormProps) {
   };
 
   return (
-    <div className="px-40">
+    <div className='px-2'>
 
         <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="m-auto mt-36 p-8 w-96 rounded border">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="m-auto mt-36 p-8 w-1/2 max-sm:w-full max-md:w-2/3 rounded border">
             <FormField
                 control={form.control}
                 name="email"
@@ -84,7 +84,7 @@ export default function ProfileForm({ onLoginSuccess }: ProfileFormProps) {
                 </FormItem>
                 )}
             />
-            <Button className="mt-2 w-full" type="submit">Submit</Button>
+                <Button className="mt-2 w-full" type="submit">Submit</Button>
         </form>
         </Form>
     </div>
