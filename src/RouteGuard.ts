@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const RouteGuard = ({ children: any }) => {
+const RouteGuard = () => {
   const [isAuth, setIsAuth] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -18,7 +18,7 @@ const RouteGuard = ({ children: any }) => {
     }
   }, [isAuth, location, navigate]);
 
-  return isAuth || location.pathname === '/login' ? children : null;
+  return isAuth || location.pathname === '/login';
 };
 
 export default RouteGuard;

@@ -9,14 +9,12 @@ import { Textarea } from '@/components/ui/textarea'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
 
 const formSchema = z.object({
   title: z.string().min(2, {
