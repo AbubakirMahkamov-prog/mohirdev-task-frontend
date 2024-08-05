@@ -76,7 +76,7 @@ export default function TabsDemo() {
 
   const setCompleted = (id: string) => {
     taskService.setCompleted(id).then(() => {
-      if (!isAdmin) {
+      if (!isAdmin || selectedUserId == '') {
         getMineNew();
         getMineCompleted();
       } else {
@@ -86,7 +86,7 @@ export default function TabsDemo() {
   }
   const setNew = (id: string) => {
     taskService.setNew(id).then(() => {
-      if (!isAdmin) {
+      if (!isAdmin || selectedUserId == '') {
         getMineNew();
         getMineCompleted();
       } else {
@@ -199,7 +199,12 @@ export default function TabsDemo() {
               </DialogTitle>
             <DialogContent>
                   <TaskForm id={selectedId} onSuccess={() => {
-                    getMineNew();
+                    if (!isAdmin || selectedUserId == '') {
+                      getMineNew();
+                    } else {
+                      handleUserChange(selectedUserId)
+                    }
+
                     setEditDialogOpen(false);
                   }} />
             </DialogContent>
