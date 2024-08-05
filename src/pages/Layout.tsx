@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button"
 import {
@@ -13,11 +13,17 @@ import {
 interface LayoutProps {
   children: ReactNode;
 }
-const isAdmin = localStorage.getItem('role') == 'admin' ? true: false;
+
 
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate()
+  
+  const [isAdmin, setIsAdmin] = useState<boolean>(false)
+  useEffect(() => {
+    setIsAdmin(localStorage.getItem('role') == 'admin' ? true: false)
+  }, [])
+
   return (
     <div className='p-4'>
       <Menubar>
