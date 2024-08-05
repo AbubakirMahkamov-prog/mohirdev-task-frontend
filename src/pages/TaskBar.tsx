@@ -2,6 +2,16 @@ import { Button } from "@/components/ui/button"
 import Layout from './Layout'
 import { Badge } from "@/components/ui/badge"
 import * as taskService from "../services/taskService";
+import * as userService from "../services/userService";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import {
     Dialog,
     DialogContent,
@@ -29,10 +39,16 @@ interface ITask {
   status: 'new' | 'completed';
   content: string;
 }
+interface IUser {
+  _id: string;
+  fullname: string;
+  email: string;
+}
 
 export default function TabsDemo() {
   const [newTasks, setNewTasks] = useState<ITask[]>([]);
   const [completedTasks, setCompletedTasks] = useState<ITask[]>([]);
+  const [users, setUsers] = useState<IUser[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('');
@@ -42,9 +58,15 @@ export default function TabsDemo() {
   const getMineCompleted = () => {
     taskService.getMineCompleted().then((res: ITask[]) => setCompletedTasks(res))
   }
+  const getAllUser = () => {
+    userService.getAll().then((res: IUser[]) => {
+      setUsers(res)
+    })
+  }
   useEffect(() => {
     getMineNew();
     getMineCompleted();
+    getAllUser()
   }, [])
 
   const setCompleted = (id: string) => {
@@ -63,9 +85,32 @@ export default function TabsDemo() {
     setSelectedId(_id);
     setEditDialogOpen(true)
   }
+  const handleUserChange = (value: string) => {
+    taskService.getByUser(value, 'new').then((res) => {
+        setNewTasks(res) 
+    })
+    taskService.getByUser(value, 'completed').then((res) => {
+      setCompletedTasks(res)
+    })
+  }
   return (
     <Layout>
-        <Tabs defaultValue="new">
+         <Select onValueChange={handleUserChange}>
+          <SelectTrigger className="mt-2">
+            <SelectValue placeholder="Select user" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Users</SelectLabel>
+              {
+                users.map((user) => (
+                  <SelectItem key={user._id} value={user._id}>{user.fullname}</SelectItem>
+                ))
+              }
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        <Tabs className="mt-2" defaultValue="new">
         <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="new">New</TabsTrigger>
             <TabsTrigger value="completed">Completed</TabsTrigger>

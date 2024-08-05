@@ -27,6 +27,12 @@ export function getMineCompleted() {
     })
 }
 
+export function getByUser(userId: string, status: 'new' | 'completed') {
+    return httpClient.get(endPoint + `/task-by-user/${userId}/${status}`).then((res) => {
+        return res.data
+    })
+}
+
 export function getOne(id: string) {
     return httpClient.get(endPoint + `/${id}`).then((res) => {
         return res.data;
