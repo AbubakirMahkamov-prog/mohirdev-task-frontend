@@ -52,6 +52,11 @@ export default function TabsDemo() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('');
+  const [selectedUserId, setSelectedUserId] = useState<string>('')
+  const [isAdmin, setIsAdmin] = useState<boolean>(false)
+  useEffect(() => {
+    setIsAdmin(localStorage.getItem('role') == 'admin' ? true: false)
+  }, [])
   const getMineNew = () => {
     taskService.getMineNew().then((res: ITask[]) => setNewTasks(res))
   }
@@ -71,14 +76,22 @@ export default function TabsDemo() {
 
   const setCompleted = (id: string) => {
     taskService.setCompleted(id).then(() => {
-      getMineNew();
-      getMineCompleted();
+      if (!isAdmin) {
+        getMineNew();
+        getMineCompleted();
+      } else {
+        handleUserChange(selectedUserId)
+      }
     })
   }
   const setNew = (id: string) => {
     taskService.setNew(id).then(() => {
-      getMineNew();
-      getMineCompleted();
+      if (!isAdmin) {
+        getMineNew();
+        getMineCompleted();
+      } else {
+        handleUserChange(selectedUserId)
+      }
     })
   }
   const openEditDialog = (_id: string) => {
@@ -92,10 +105,13 @@ export default function TabsDemo() {
     taskService.getByUser(value, 'completed').then((res) => {
       setCompletedTasks(res)
     })
+    setSelectedUserId(value)
   }
   return (
     <Layout>
-         <Select onValueChange={handleUserChange}>
+      {
+         isAdmin &&
+         <Select value={selectedUserId} onValueChange={handleUserChange}>
           <SelectTrigger className="mt-2">
             <SelectValue placeholder="Select user" />
           </SelectTrigger>
@@ -110,6 +126,7 @@ export default function TabsDemo() {
             </SelectGroup>
           </SelectContent>
         </Select>
+      }
         <Tabs className="mt-2" defaultValue="new">
         <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="new">New</TabsTrigger>
