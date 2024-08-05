@@ -25,6 +25,7 @@ export function createItem(data: any) {
         return res.data;
     })
 }
+
 export function updateItem(id: string, data: any) {
     return httpClient.patch(endPoint + `/${id}`, data).then((res) => {
         return res.data;
